@@ -1,0 +1,18 @@
+{
+	"Rooster":{
+		"name":"Morty Rooster",
+		"backers":["nup","adp","mp","ldp"]
+	},
+	"Alore":{
+		"name":"Dawn Alore",
+		"backers":["sdp","ucp"]
+	},
+	"Macharius":{
+		"name":"Macharius de York",
+		"backers":[]
+	},
+	"Byron":{
+		"name":"Sergeant Byron",
+		"backers":[]
+	}
+}
