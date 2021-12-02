@@ -36,6 +36,7 @@ class Party():
 		self.extrapoints = extrapoints
 		self.points = (members*5) + extrapoints
 		self.house = self.points//30 + 1
+		self.roleId =  None
 
 	def getName(self):
 		return self.name
@@ -92,6 +93,7 @@ def createObjects():
 		partyDict = filereader.load(partyFile)
 	#partyDict is a two-dimensional dictionary
 	partyRefs = list(partyDict.keys())
+	print(partyRefs)
 	partyObjects = {}
 	for i,j in zip(range(len(partyRefs)),partyRefs):
 		temp = partyDict[partyRefs[i]].values()
@@ -156,12 +158,12 @@ async def info(ctx,reference=None):
 			for i in client.emojis:
 				if i.name == reference.upper():
 					msgEmoji = i.id
-			if popularity > 0 and popularity <=50:
+			if popularity > 0 and popularity <=49:
+				popPhrase = "disliked"
+			elif popularity > 49 and popularity <= 70:
 				popPhrase = "obscure"
-			elif popularity > 50 and popularity <= 70:
-				popPhrase = "slightly popular"
 			elif popularity > 70 and popularity <=100:
-				popPhrase = "reasonably popular"
+				popPhrase = "somewhat popular"
 			elif popularity > 100 and popularity <=140:
 				popPhrase = "popular"
 			elif popularity > 140 and popularity <= 200:
@@ -262,6 +264,22 @@ async def removepoints(ctx,reference=None,points=None):
 				await ctx.send("A valid integer value and reference must be provided (>points [reference] [integer]).")
 		else:
 			await ctx.send("A valid integer value and reference must be provided (>points  [reference] [integer]).")
+	else:
+		await ctx.send(f"Hey, {ctx.author.mention}! You can't run this command! Only users with the {role.name} role may use this command.")
+
+@client.command()
+async def newparty(ctx,newReference=None,newName=None):
+	role = discord.utils.find(lambda r: r.name == 'Eternal Press Secretary', ctx.message.guild.roles)
+	if role in ctx.author.roles:
+		if (newReference and newName != None) and not (newReference in list(partyObjects.keys() ) ):
+			newName = newName.title()
+			newReference = newReference.lower()
+			partyRefs.append(newReference)
+			partyObjects[newReference] = Party(newName,0,50)
+			saveObjects()
+			await ctx.send(f"The {newName} Party has been added with party reference {newReference}.")
+		else:
+			await ctx.send("A valid reference and name must be provided (>newparty [reference] [name]).")	
 	else:
 		await ctx.send(f"Hey, {ctx.author.mention}! You can't run this command! Only users with the {role.name} role may use this command.")
 

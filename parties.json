@@ -1,4 +1,9 @@
 {
+    "TEMPLATE": {
+        "name": "Name",
+        "members": 0,
+        "extrapoints": 70
+    },
     "mp": {
         "name": "Minarchy",
         "members": 5,
@@ -38,5 +43,10 @@
         "name": "Bull Moose",
         "members": 4,
         "extrapoints": 70
+    },
+    "tp": {
+        "name": "Test",
+        "members": 0,
+        "extrapoints": 50
     }
 }
