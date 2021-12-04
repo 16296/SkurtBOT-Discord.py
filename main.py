@@ -35,7 +35,6 @@ class Party():
 		self.members = members
 		self.extrapoints = extrapoints
 		self.points = (members*5) + extrapoints
-		self.house = self.points//30 + 1
 		self.roleId =  None
 
 	def getName(self):
@@ -44,8 +43,6 @@ class Party():
 		return self.members
 	def getPoints(self):
 		return self.points
-	def getHouse(self):
-		return self.house
 	def getExtras(self):
 		return self.extrapoints
 
@@ -93,7 +90,6 @@ def createObjects():
 		partyDict = filereader.load(partyFile)
 	#partyDict is a two-dimensional dictionary
 	partyRefs = list(partyDict.keys())
-	print(partyRefs)
 	partyObjects = {}
 	for i,j in zip(range(len(partyRefs)),partyRefs):
 		temp = partyDict[partyRefs[i]].values()
@@ -171,6 +167,19 @@ async def info(ctx,reference=None):
 			elif popularity > 200:
 				popPhrase = "overwhelmingly popular"
 			await ctx.send(f"The {partyObjects[reference].getName()} Party had {partyObjects[reference].getMembers()} counted members in the last midterm election.\n\nThe {partyObjects[reference].getName()} Party is currently {popPhrase}. <:{reference}:{msgEmoji}>")
+		else:
+			await ctx.send("A valid reference must be provided (e.g. MP, UCP, NUP).")
+	else:
+		await ctx.send("A reference must be provided (e.g. MP, UCP, NUP).")
+
+@client.command()
+async def house(ctx,reference=None):
+	if reference != None:
+		reference = reference.lower()
+		print(f"Command >house running in {ctx.guild.name}...")
+		if reference in list(partyObjects.keys()):
+			house = (partyObjects[reference].getPoints() // 20) + 1
+			await ctx.send(f"Based on data taken in the most recent midterm and current popularity figures, the {partyObjects[reference].getName()} Party should have {house} seats in the House of Representatives.")
 		else:
 			await ctx.send("A valid reference must be provided (e.g. MP, UCP, NUP).")
 	else:
@@ -321,7 +330,8 @@ messageReplyFunnys = {
 	"begone":"https://media.discordapp.net/attachments/456352116269907968/913191179124867072/C23A36FE-94DC-485C-9F67-CD2754696041.gif",
 	"mod hat":"https://tenor.com/view/discord-mod-life-of-a-discord-mod-discord-moderator-family-guy-gif-22385062",
 	"oorah":"https://tenor.com/view/sir-yes-sir-oorah-oorah-marine-twerk-army-gif-22931251",
-	"xd":"https://cdn.discordapp.com/attachments/821222063901245440/915641492431831060/XDXDXDXD.jpg"
+	"xd":"https://cdn.discordapp.com/attachments/821222063901245440/915641492431831060/XDXDXDXD.jpg",
+	"real":"NOT FAKE"
 }
 
 messageBlacklist = ["McCorkle Jones Simp","Beatrice","SkurtBOT","Xenomorth"]
@@ -333,6 +343,9 @@ async def on_message(message):
 			print(f"ayo {message.author.name.lower()} just said {i}")
 			await message.channel.send(messageReplyFunnys[i])
 			break
+		elif message.content.lower() == i and message.author.name in messageBlacklist:
+			print(f"lmao {message.author.name.lower()} just tried to say something funny")
+			await message.channel.send("unfunny meme please leave the server")
 	await client.process_commands(message)
 
 @client.command()

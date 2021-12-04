@@ -32,7 +32,7 @@
     "sdp": {
         "name": "Social Democrat",
         "members": 8,
-        "extrapoints": 90
+        "extrapoints": 95
     },
     "adp": {
         "name": "American Destiny",
@@ -46,7 +46,7 @@
     },
     "tp": {
         "name": "Test",
-        "members": 0,
+        "members": 100,
         "extrapoints": 50
     }
 }
