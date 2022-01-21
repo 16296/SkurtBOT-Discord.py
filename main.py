@@ -98,7 +98,7 @@ def createObjects():
 
 @client.command()
 async def sim_votes(ctx,candidate1=None,candidate2=None,humanvotes=None):
-	role = discord.utils.find(lambda r: r.name == 'Eternal Press Secretary', ctx.message.guild.roles)
+	role = discord.utils.find(lambda r: r.name == 'Developer', ctx.message.guild.roles)
 	if role in ctx.author.roles:
 		if candidate1 != None and candidate2 != None and humanvotes != None and humanvotes.isdigit():
 			totalvotes = (int(humanvotes)//3)*2
@@ -178,7 +178,7 @@ async def house(ctx,reference=None):
 		reference = reference.lower()
 		print(f"Command >house running in {ctx.guild.name}...")
 		if reference in list(partyObjects.keys()):
-			house = (partyObjects[reference].getPoints() // 20) + 1
+			house = (partyObjects[reference].getPoints() // 40) + 1
 			await ctx.send(f"Based on data taken in the most recent midterm and current popularity figures, the {partyObjects[reference].getName()} Party should have {house} seats in the House of Representatives.")
 		else:
 			await ctx.send("A valid reference must be provided (e.g. MP, UCP, NUP).")
@@ -187,7 +187,7 @@ async def house(ctx,reference=None):
 
 @client.command()
 async def popularity(ctx,reference=None):
-	role = discord.utils.find(lambda r: r.name == 'Eternal Press Secretary', ctx.message.guild.roles)
+	role = discord.utils.find(lambda r: r.name == 'Developer', ctx.message.guild.roles)
 	if role in ctx.author.roles: ###CHANGE ABOVE TO ADMINISTRATOR
 		if reference != None:
 			reference = reference.lower()
@@ -203,7 +203,7 @@ async def popularity(ctx,reference=None):
 
 @client.command()
 async def members(ctx,reference=None,newMembers=None):
-	role = discord.utils.find(lambda r: r.name == 'Eternal Press Secretary', ctx.message.guild.roles)
+	role = discord.utils.find(lambda r: r.name == 'Developer', ctx.message.guild.roles)
 	if role in ctx.author.roles: ###CHANGE ABOVE TO ADMINISTRATOR
 		if reference and newMembers != None:
 			reference = reference.lower()
@@ -225,7 +225,7 @@ async def members(ctx,reference=None,newMembers=None):
 
 @client.command()
 async def addpoints(ctx,reference=None,points=None):
-	role = discord.utils.find(lambda r: r.name == 'Eternal Press Secretary', ctx.message.guild.roles)
+	role = discord.utils.find(lambda r: r.name == 'Developer', ctx.message.guild.roles)
 	if role in ctx.author.roles: ###CHANGE ABOVE TO ADMINISTRATOR
 		if reference and points != None:
 			reference = reference.lower()
@@ -250,7 +250,7 @@ async def addpoints(ctx,reference=None,points=None):
 
 @client.command()
 async def removepoints(ctx,reference=None,points=None):
-	role = discord.utils.find(lambda r: r.name == 'Eternal Press Secretary', ctx.message.guild.roles)
+	role = discord.utils.find(lambda r: r.name == 'Developer', ctx.message.guild.roles)
 	if role in ctx.author.roles: ###CHANGE ABOVE TO ADMINISTRATOR
 		if reference and points != None:
 			reference = reference.lower()
@@ -278,7 +278,7 @@ async def removepoints(ctx,reference=None,points=None):
 
 @client.command()
 async def newparty(ctx,newReference=None,newName=None):
-	role = discord.utils.find(lambda r: r.name == 'Eternal Press Secretary', ctx.message.guild.roles)
+	role = discord.utils.find(lambda r: r.name == 'Developer', ctx.message.guild.roles)
 	if role in ctx.author.roles:
 		if (newReference and newName != None) and not (newReference in list(partyObjects.keys() ) ):
 			newName = newName.title()
@@ -305,6 +305,28 @@ async def election(ctx,reference):
 		await message.add_reaction(f"<:{reference}:{msgEmoji}>")
 	else:
 		await ctx.send(f'Invalid party reference! Oopsie!')
+
+@client.command()
+async def random_states(ctx):
+	stateRoleNames = ["Dixie","Columbia","Sierra","Olympia"] #defines roles we're looking for
+	stateRoles = [] #declares an empty list for role objects
+	for name in stateRoleNames: #for each role we're looking for,
+		stateRoles.append(discord.utils.get(ctx.guild.roles,name=name)) #append the role object with that name to the list
+	assignments = 0
+	for member in ctx.guild.members: #for every member in the server,
+		for role in member.roles: #and for every role that member has,
+			if role not in stateRoles: #if the role isn't in stateRoles,
+				found = False #flag found as false
+			else: #if the role is in stateRoles,
+				found = True #flag found as true
+				break #break from the loop
+		if not found: #if the state role wasn't found,
+			rdm = dice.randint(0,3)
+			randomRole = stateRoles[rdm]
+			print(discord.utils.get(ctx.guild.roles,name=stateRoles[3]))
+			assignments += 1
+			await member.add_roles(randomRole) #assign a random state role
+	await ctx.send(f"{assignments} assignments were made.")
 
 messageReplyFunnys = {
 	"ok":"https://media.discordapp.net/attachments/602932168783822860/912776326405054464/ok.gif",
@@ -352,6 +374,12 @@ async def on_message(message):
 async def funny(ctx):
 	random = dice.randint(0,len(messageReplyFunnys)-1)
 	await ctx.send(list(messageReplyFunnys.values())[random])
+
+
+@client.event
+async def on_member_join(member):
+	channel = client.get_channel(763595352745836604)
+	await channel.send(f"Welcome to the United Parties of Discord, {member.mention}!\nRead the pinned message in <#784968782187069510> to gain full access to the server. We hope you enjoy your stay!")
 
 @client.event
 async def on_ready():

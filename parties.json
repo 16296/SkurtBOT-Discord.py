@@ -2,51 +2,6 @@
     "TEMPLATE": {
         "name": "Name",
         "members": 0,
-        "extrapoints": 70
-    },
-    "mp": {
-        "name": "Minarchy",
-        "members": 5,
-        "extrapoints": 70
-    },
-    "nup": {
-        "name": "National Union",
-        "members": 21,
-        "extrapoints": 110
-    },
-    "ucp": {
-        "name": "United Communist",
-        "members": 2,
-        "extrapoints": 55
-    },
-    "cwp": {
-        "name": "Communist Worker",
-        "members": 3,
-        "extrapoints": 75
-    },
-    "rdp": {
-        "name": "Republican-Democrat",
-        "members": 5,
-        "extrapoints": 70
-    },
-    "sdp": {
-        "name": "Social Democrat",
-        "members": 8,
-        "extrapoints": 95
-    },
-    "adp": {
-        "name": "American Destiny",
-        "members": 1,
-        "extrapoints": 55
-    },
-    "bmp": {
-        "name": "Bull Moose",
-        "members": 4,
-        "extrapoints": 70
-    },
-    "tp": {
-        "name": "Test",
-        "members": 100,
         "extrapoints": 50
     }
 }
